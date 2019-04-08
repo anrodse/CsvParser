@@ -44,12 +44,12 @@ namespace Anrodse.CsvParser
 			string linea = ReadLine();
 			if (String.IsNullOrEmpty(linea)) return false;
 
-			int p = 0, rows = 0;
+			string valor;
+			int ini, p = 0, nrow = 0;
+
 			while (p < linea.Length)
 			{
-				string value;
-				int ini = p;
-
+				ini = p;
 				if (linea[p] == '"')
 				{
 					p++;
@@ -62,35 +62,39 @@ namespace Anrodse.CsvParser
 
 							// Si hay dos dobles comillas, se ignorarán
 							if (p >= linea.Length || linea[p] != '"')
-							{
-								break;
-							}
+							{ break; }
 						}
 						p++;
 					}
 
-					value = linea.Substring(ini + 1, p - ini - 2);  // Evito comillas
-					value = value.Replace("\"\"", "\"");
+					valor = linea.Substring(ini + 1, p - ini - 2);  // Evito comillas
+					valor = valor.Replace("\"\"", "\"");
 				}
 				else
 				{
 					while (p < linea.Length && linea[p] != Separator) p++;
-					value = linea.Substring(ini, p - ini);
+					valor = linea.Substring(ini, p - ini);
 				}
 
 				// Añadir valor a la lista
-				if (rows < row.Count) row[rows] = value;
-				else row.Add(value);
+				if (nrow < row.Count) row[nrow] = valor;
+				else row.Add(valor);
+				nrow++;
 
-				rows++;
+				p++;    // Saltar separador
+			}
 
-				// Pasar a la siguiente coma
-				while (p < linea.Length && linea[p] != Separator) p++;
-				if (p < linea.Length) p++;
+			// Si acaba en "Separador", añadir una columna vacía
+			if (linea[linea.Length - 1].Equals(Separator))
+			{
+				valor = String.Empty;
+				if (nrow < row.Count) row[nrow] = valor;
+				else row.Add(valor);
+				nrow++;
 			}
 
 			// Borrar columnas no usadas
-			while (row.Count > rows) row.RemoveAt(rows);
+			while (row.Count > nrow) row.RemoveAt(nrow);
 
 			return (row.Count > 0);
 		}
