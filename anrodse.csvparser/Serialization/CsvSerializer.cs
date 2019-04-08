@@ -33,7 +33,7 @@ namespace Anrodse.CsvParser.Serialization
 		/// </summary>
 		/// <param name="reader">Csv file reader</param>
 		/// <returns>object list extracted from file</returns>
-		public List<object> Deserialize(CsvReader reader)
+		public IEnumerable<object> Deserialize(CsvReader reader)
 		{
 			var diccionario = GetDiccionarioCabeceras(reader);
 			List<object> lista = new List<object>();
