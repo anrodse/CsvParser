@@ -1,12 +1,9 @@
 ﻿using Anrodse.CsvParser.Serialization;
-using Anrodse.CsvParser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Anrodse.CsvParser.Demo
@@ -20,6 +17,8 @@ namespace Anrodse.CsvParser.Demo
 			[Description("Sacramento transactions")] Transactions,
 			[Description("Sales Record")] SalesRecord
 		}
+
+		private IEnumerable<object> objetos;
 
 		public Ventana()
 		{
@@ -70,12 +69,12 @@ namespace Anrodse.CsvParser.Demo
 			{
 				crono.Start();
 				CsvSerializer csv = new CsvSerializer(T);
-				var datos = csv.Deserialize(new CsvReader(fichero) { Separator = Separador });
+				objetos = csv.Deserialize(new CsvReader(fichero) { Separator = Separador });
 				crono.Stop();
 
-				tabModelo.DataSource = datos;
+				tabModelo.DataSource = objetos;
 				lblStatus.Text = "Lectura finalizada en " + (crono.Elapsed.Milliseconds / 1000.0) + " s.";
-				lblResultado.Text = datos.Count() + " resultados";
+				lblResultado.Text = objetos.Count() + " resultados";
 			}
 			catch (CsvParser.Exceptions.CsvParseException ex)
 			{
@@ -91,5 +90,35 @@ namespace Anrodse.CsvParser.Demo
 			crono.Reset();
 		}
 
+		private void btnGuardar_Click(object sender, EventArgs e)
+		{
+			if (objetos == null || objetos.Count() == 0)
+			{
+				MessageBox.Show("No hay datos cargados", "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				lblStatus.Text = "No hay datos que guardar.";
+				lblResultado.Text = "Error";
+				return;
+			}
+
+			SaveFileDialog fsd = new SaveFileDialog()
+			{
+				Filter = "csv (separado por comas)|*.csv",
+				Title = "Guardar fichero CSV",
+			};
+
+			if (fsd.ShowDialog() == DialogResult.OK)
+			{
+				string path = fsd.FileName;
+				lblStatus.Text = "Guardando datos en " + path + ".";
+
+				using (CsvWriter writer = new CsvWriter(path) { Separator = ',' })
+				{
+					Type t = objetos.First().GetType();
+					CsvSerializer csv = new CsvSerializer(t);
+					csv.Serialize(objetos, writer);
+				}
+				lblStatus.Text = "Fichero de datos creado.";
+			}
+		}
 	}
 }

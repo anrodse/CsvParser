@@ -62,10 +62,10 @@ namespace Anrodse.CsvParser.Demo.Modelo
 		public string UpdatedOn { get; set; }
 
 		[CsvCol("Latitude")]
-		public string Latitude { get; set; }
+		public double Latitude { get; set; }
 
 		[CsvCol("Longitude")]
-		public string Longitude { get; set; }
+		public double Longitude { get; set; }
 
 		[CsvCol("Location")]
 		public string Location { get; set; }

@@ -30,25 +30,22 @@ namespace Anrodse.CsvParser
 		/// Write one row in a file
 		/// </summary>
 		/// <param name="row">Row to be written</param>
-		public void WriteRow(List<string> row)
+		public void WriteRow(IEnumerable<string> row)
 		{
 			StringBuilder strBuilder = new StringBuilder();
-			bool firstColumn = true;
 			foreach (string value in row)
 			{
 				// Escapar caracteres especiales
 				if (value.IndexOfAny(new char[] { '"', Separator }) == -1) strBuilder.Append(value);
 				else strBuilder.AppendFormat("\"{0}\"", value.Replace("\"", "\"\""));
 
-				// Separador para primera columna
-				if (!firstColumn)
-				{
-					strBuilder.Append(Separator);
-					firstColumn = false;
-				}
+				strBuilder.Append(Separator);
 			}
 
-			WriteLine(strBuilder.ToString());
+			// Eliminar último separador
+			strBuilder.Remove(strBuilder.Length - 1, 1);
+
+			WriteLine(strBuilder);
 		}
 
 	}

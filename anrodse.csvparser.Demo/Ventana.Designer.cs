@@ -33,9 +33,10 @@
 			this.lblModelo = new System.Windows.Forms.Label();
 			this.btnCargar = new System.Windows.Forms.Button();
 			this.pnStatus = new System.Windows.Forms.Panel();
-			this.lblStatus = new System.Windows.Forms.Label();
 			this.lblResultado = new System.Windows.Forms.Label();
+			this.lblStatus = new System.Windows.Forms.Label();
 			this.lblSep = new System.Windows.Forms.Label();
+			this.btnGuardar = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.tabModelo)).BeginInit();
 			this.pnStatus.SuspendLayout();
 			this.SuspendLayout();
@@ -90,15 +91,6 @@
 			this.pnStatus.Size = new System.Drawing.Size(544, 20);
 			this.pnStatus.TabIndex = 4;
 			// 
-			// lblStatus
-			// 
-			this.lblStatus.Location = new System.Drawing.Point(3, 0);
-			this.lblStatus.Name = "lblStatus";
-			this.lblStatus.Size = new System.Drawing.Size(432, 20);
-			this.lblStatus.TabIndex = 0;
-			this.lblStatus.Text = "Esperando lectura";
-			this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// lblResultado
 			// 
 			this.lblResultado.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -108,6 +100,15 @@
 			this.lblResultado.TabIndex = 1;
 			this.lblResultado.Text = "Listo";
 			this.lblResultado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// lblStatus
+			// 
+			this.lblStatus.Location = new System.Drawing.Point(3, 0);
+			this.lblStatus.Name = "lblStatus";
+			this.lblStatus.Size = new System.Drawing.Size(432, 20);
+			this.lblStatus.TabIndex = 0;
+			this.lblStatus.Text = "Esperando lectura";
+			this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lblSep
 			// 
@@ -119,6 +120,16 @@
 			this.lblSep.Size = new System.Drawing.Size(556, 2);
 			this.lblSep.TabIndex = 5;
 			// 
+			// btnGuardar
+			// 
+			this.btnGuardar.Location = new System.Drawing.Point(296, 8);
+			this.btnGuardar.Name = "btnGuardar";
+			this.btnGuardar.Size = new System.Drawing.Size(75, 23);
+			this.btnGuardar.TabIndex = 3;
+			this.btnGuardar.Text = "Guardar";
+			this.btnGuardar.UseVisualStyleBackColor = true;
+			this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+			// 
 			// Ventana
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -126,6 +137,7 @@
 			this.ClientSize = new System.Drawing.Size(555, 307);
 			this.Controls.Add(this.lblSep);
 			this.Controls.Add(this.pnStatus);
+			this.Controls.Add(this.btnGuardar);
 			this.Controls.Add(this.btnCargar);
 			this.Controls.Add(this.lblModelo);
 			this.Controls.Add(this.cmbModelo);
@@ -149,6 +161,7 @@
 		private System.Windows.Forms.Label lblResultado;
 		private System.Windows.Forms.Label lblStatus;
 		private System.Windows.Forms.Label lblSep;
+		private System.Windows.Forms.Button btnGuardar;
 	}
 }
 

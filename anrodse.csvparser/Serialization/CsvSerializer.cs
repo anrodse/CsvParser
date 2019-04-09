@@ -19,9 +19,55 @@ namespace Anrodse.CsvParser.Serialization
 
 		#region Serialize
 
-		public void Serialize(CsvWriter writer)
+		/// <summary>
+		/// Write csv file from list
+		/// </summary>
+		/// <param name="data">data objects</param>
+		/// <param name="reader">Csv file writer</param>
+		public void Serialize(IEnumerable<object> data, CsvWriter writer)
 		{
-			throw new Exception("Serialize :: En desarrollo...");
+			var atributos = getAtributos();
+			writer.WriteRow(atributos);
+
+			var propiedades = getPropiedades();
+			string[] fila = new string[propiedades.Count()];
+			foreach (var obj in data)
+			{
+				for (int i = 0; i < fila.Count(); i++)
+				{
+					string hr = propiedades[i].ToString();
+					fila[i] = T.GetProperty(hr)?.GetValue(obj, null)?.ToString() ?? "";
+				}
+
+				writer.WriteRow(fila);
+			}
+		}
+
+		private string[] getPropiedades()
+		{
+			return T.GetProperties()
+						.Where(x => x.GetCustomAttributes(true).Where(y => y is CsvColAttribute).Count() > 0)
+						.Select(x => x.Name)
+						.ToArray();
+		}
+
+		private string[] getAtributos()
+		{
+			List<string> res = new List<string>();
+
+			PropertyInfo[] props = T.GetProperties();
+			foreach (PropertyInfo prop in props)
+			{
+				foreach (Attribute att in prop.GetCustomAttributes(true))
+				{
+					if (att is CsvColAttribute)
+					{
+						res.Add((att as CsvColAttribute).Columna);
+					}
+				}
+			}
+
+			return res.ToArray();
 		}
 
 		#endregion Serialize
