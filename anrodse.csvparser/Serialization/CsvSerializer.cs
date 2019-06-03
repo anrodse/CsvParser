@@ -24,10 +24,14 @@ namespace Anrodse.CsvParser.Serialization
 		/// </summary>
 		/// <param name="data">data objects</param>
 		/// <param name="reader">Csv file writer</param>
-		public void Serialize(IEnumerable<object> data, CsvWriter writer)
+		/// <param name="addHeaders">Add column headers (if true)</param>
+		public void Serialize(IEnumerable<object> data, CsvWriter writer, bool addHeaders = false)
 		{
-			var atributos = getAtributos();
-			writer.WriteRow(atributos);
+			if (addHeaders)
+			{
+				var atributos = getAtributos();
+				writer.WriteRow(atributos);
+			}
 
 			var propiedades = getPropiedades();
 			string[] fila = new string[propiedades.Count()];

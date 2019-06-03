@@ -22,6 +22,12 @@ namespace Anrodse.CsvParser
 
 		public CsvWriter(Stream stream) : base(stream) { }
 
+		public CsvWriter(Stream stream, Encoding encoding) : base(stream, encoding) { }
+
+		public CsvWriter(string path, bool append) : base(path, append) { }
+
+		public CsvWriter(string path, bool append, Encoding encoding) : base(path, append, encoding) { }
+
 		public CsvWriter(string filename) : base(filename) { }
 
 		#endregion Constructor
@@ -49,5 +55,4 @@ namespace Anrodse.CsvParser
 		}
 
 	}
-
 }
