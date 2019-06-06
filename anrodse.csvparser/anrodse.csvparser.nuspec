@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/anrodse/CsvParser</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/anrodse/CsvParser/master/anrodse.csvparser/icon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Package release.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>csv parser serializar anrodse csvparser</tags>
+  </metadata>
+</package>
