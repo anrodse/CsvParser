@@ -42,7 +42,7 @@ namespace Anrodse.CsvParser
 			foreach (string value in row)
 			{
 				// Escapar caracteres especiales
-				if (value.IndexOfAny(new char[] { '"', Separator }) == -1) strBuilder.Append(value);
+				if (value.IndexOfAny(new char[] { '"', '\r', '\n', Separator }) == -1) strBuilder.Append(value);
 				else strBuilder.AppendFormat("\"{0}\"", value.Replace("\"", "\"\""));
 
 				strBuilder.Append(Separator);

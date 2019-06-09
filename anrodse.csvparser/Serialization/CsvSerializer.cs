@@ -25,7 +25,7 @@ namespace Anrodse.CsvParser.Serialization
 		/// <param name="data">data objects</param>
 		/// <param name="reader">Csv file writer</param>
 		/// <param name="addHeaders">Add column headers (if true)</param>
-		public void Serialize(IEnumerable<object> data, CsvWriter writer, bool addHeaders = false)
+		public void Serialize(IEnumerable<object> data, CsvWriter writer, bool addHeaders = true)
 		{
 			if (addHeaders)
 			{
