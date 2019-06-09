@@ -49,11 +49,13 @@ namespace Anrodse.CsvParser
 
 			while (p < linea.Length)
 			{
-				ini = p;
 				if (linea[p] == '"')
 				{
 					p++;
-					while (p < linea.Length)
+					ini = p;
+					valor = string.Empty;
+
+					while (true)
 					{
 						// Si encuentro comillas
 						if (linea[p] == '"')
@@ -64,14 +66,26 @@ namespace Anrodse.CsvParser
 							if (p >= linea.Length || linea[p] != '"')
 							{ break; }
 						}
+
 						p++;
+						if (p >= linea.Length)
+						{
+							valor += linea.Substring(ini, p - ini) + "\r\n";
+							while (String.IsNullOrEmpty(linea = ReadLine()))
+							{
+								if (linea == null) return false;
+								valor += "\r\n";    // Lineas vacías
+							}
+							ini = p = 0;
+						}
 					}
 
-					valor = linea.Substring(ini + 1, p - ini - 2);  // Evito comillas
+					valor += linea.Substring(ini, p - ini - 1);  // Evito comillas
 					valor = valor.Replace("\"\"", "\"");
 				}
 				else
 				{
+					ini = p;
 					while (p < linea.Length && linea[p] != Separator) p++;
 					valor = linea.Substring(ini, p - ini);
 				}

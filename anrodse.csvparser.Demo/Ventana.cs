@@ -68,12 +68,16 @@ namespace Anrodse.CsvParser.Demo
 			try
 			{
 				crono.Start();
-				CsvSerializer csv = new CsvSerializer(T);
-				objetos = csv.Deserialize(new CsvReader(fichero) { Separator = Separador });
+
+				using (var reader = new CsvReader(fichero) { Separator = Separador })
+				{
+					CsvSerializer csv = new CsvSerializer(T);
+					objetos = csv.Deserialize(reader);
+				}
 				crono.Stop();
 
 				tabModelo.DataSource = objetos;
-				lblStatus.Text = "Lectura finalizada en " + (crono.Elapsed.Milliseconds / 1000.0) + " s.";
+				lblStatus.Text = "Lectura finalizada en " + (crono.ElapsedMilliseconds/ 1000.0) + " s.";
 				lblResultado.Text = objetos.Count() + " resultados";
 			}
 			catch (CsvParser.Exceptions.CsvParseException ex)
