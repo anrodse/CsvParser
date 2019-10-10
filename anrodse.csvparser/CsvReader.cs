@@ -7,10 +7,41 @@ using System.Text;
 namespace Anrodse.CsvParser
 {
 	/// <summary>
-	/// Clase para lectura de fichero csv
+	/// Class for csv file read
 	/// </summary>
 	public class CsvReader : StreamReader
 	{
+		#region Enums
+
+		/// <summary>
+		/// Read results
+		/// </summary>
+		public enum ReadResult
+		{
+			/// <summary>
+			/// Ok result
+			/// </summary>
+			Ok,
+			/// <summary>
+			/// End of File result
+			/// </summary>
+			EoF,
+			/// <summary>
+			/// Error result
+			/// </summary>
+			Error,
+			/// <summary>
+			/// Empty line result
+			/// </summary>
+			EmptyLine,
+			/// <summary>
+			/// Just separators line result
+			/// </summary>
+			SemicolonLine
+		}
+
+		#endregion Enums
+
 		#region Propiedades
 
 		/// <summary>
@@ -20,29 +51,50 @@ namespace Anrodse.CsvParser
 
 		#endregion Propiedades
 
-		#region Constructor
+		#region Constructores
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="stream">Csv input stream</param>
 		public CsvReader(Stream stream) : base(stream) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="path">Csv file path</param>
 		[SecuritySafeCritical]
 		public CsvReader(string path) : base(path) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="stream">Csv input stream</param>
+		/// <param name="encoding">Text encoding</param>
 		public CsvReader(Stream stream, Encoding encoding) : base(stream, encoding) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="path">Csv file path</param>
+		/// <param name="encoding">Text encoding</param>
 		[SecuritySafeCritical]
 		public CsvReader(string path, Encoding encoding) : base(path, encoding) { }
 
-		#endregion Constructor
+		#endregion Constructores
 
 		/// <summary>
-		/// Reads one line from csv file
+		/// Reads one line from csv file. Empty lines will be ignored
 		/// </summary>
 		/// <param name="row">Result array</param>
-		/// <returns>true si la línea es correcta</returns>
-		public bool ReadRow(List<string> row)
+		/// <returns>Read result</returns>
+		public ReadResult ReadRow(ref List<string> row)
 		{
 			string linea = ReadLine();
-			if (String.IsNullOrEmpty(linea)) return false;
+
+			if (linea == null) { row.Clear(); return ReadResult.EoF; }
+			if (String.IsNullOrEmpty(linea)) { /*row.ForEach(x => x = String.Empty);*/ return ReadResult.EmptyLine; }
+			if (String.IsNullOrEmpty(linea.Trim(Separator))) { /*row.Clear();*/ return ReadResult.SemicolonLine; }
 
 			string valor;
 			int ini, p = 0, nrow = 0;
@@ -73,7 +125,7 @@ namespace Anrodse.CsvParser
 							valor += linea.Substring(ini, p - ini) + "\r\n";
 							while (String.IsNullOrEmpty(linea = ReadLine()))
 							{
-								if (linea == null) return false;
+								if (linea == null) return ReadResult.Error;
 								valor += "\r\n";    // Lineas vacías
 							}
 							ini = p = 0;
@@ -110,22 +162,23 @@ namespace Anrodse.CsvParser
 			// Borrar columnas no usadas
 			while (row.Count > nrow) row.RemoveAt(nrow);
 
-			return (row.Count > 0);
+			//return (row.Count > 0)? ReadResult.Ok: ReadResult.EmptyLine;
+			return ReadResult.Ok;
 		}
 
 		/// <summary>
 		/// Read csv column headers
 		/// Reestart file read, moving pointer to the begining
 		/// </summary>
-		/// <param name="row">Column list</param>
-		/// <returns>true if header read is correct</returns>
-		public bool ReadHeader(List<string> header)
+		/// <param name="header">Column list</param>
+		/// <returns>Read result</returns>
+		public ReadResult ReadHeader(ref List<string> header)
 		{
 			// Mueve el puntero al principio
 			BaseStream.Position = 0;
 			DiscardBufferedData();
 
-			return ReadRow(header);
+			return ReadRow(ref header);
 		}
 
 	}

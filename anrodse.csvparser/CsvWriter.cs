@@ -12,7 +12,7 @@ namespace Anrodse.CsvParser
 		#region Propiedades
 
 		/// <summary>
-		/// Column separato (';' by default)
+		/// Column separator (';' by default)
 		/// </summary>
 		public char Separator { get; set; } = ';';
 
@@ -20,14 +20,38 @@ namespace Anrodse.CsvParser
 
 		#region Constructor
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="stream">Output stream</param>
 		public CsvWriter(Stream stream) : base(stream) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="stream">Output stream</param>
+		/// <param name="encoding">Text encoding</param>
 		public CsvWriter(Stream stream, Encoding encoding) : base(stream, encoding) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="path">Output file path</param>
+		/// <param name="append">Append to the file or not</param>
 		public CsvWriter(string path, bool append) : base(path, append) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="path">Output file path</param>
+		/// <param name="append">Append to the file or not</param>
+		/// <param name="encoding">Text encoding</param>
 		public CsvWriter(string path, bool append, Encoding encoding) : base(path, append, encoding) { }
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="filename">Output file name</param>
 		public CsvWriter(string filename) : base(filename) { }
 
 		#endregion Constructor

@@ -11,7 +11,7 @@
     <iconUrl>https://raw.githubusercontent.com/anrodse/CsvParser/master/anrodse.csvparser/icon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Package release.</releaseNotes>
+    <releaseNotes>Package update release.</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>csv parser serializar anrodse csvparser</tags>
   </metadata>

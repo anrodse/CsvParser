@@ -7,12 +7,19 @@ using System.Reflection;
 
 namespace Anrodse.CsvParser.Serialization
 {
+	/// <summary>
+	/// Csv file serializer
+	/// </summary>
 	public class CsvSerializer
 	{
 		private readonly Type T;
 
 		#region Constructor
 
+		/// <summary>
+		/// Class constructor
+		/// </summary>
+		/// <param name="T">Serializer object class</param>
 		public CsvSerializer(Type T) { this.T = T; }
 
 		#endregion Constructor
@@ -23,7 +30,7 @@ namespace Anrodse.CsvParser.Serialization
 		/// Write csv file from list
 		/// </summary>
 		/// <param name="data">data objects</param>
-		/// <param name="reader">Csv file writer</param>
+		/// <param name="writer">Csv file writer</param>
 		/// <param name="addHeaders">Add column headers (if true)</param>
 		public void Serialize(IEnumerable<object> data, CsvWriter writer, bool addHeaders = true)
 		{
@@ -34,10 +41,10 @@ namespace Anrodse.CsvParser.Serialization
 			}
 
 			var propiedades = getPropiedades();
-			string[] fila = new string[propiedades.Count()];
+			string[] fila = new string[propiedades.Length];
 			foreach (var obj in data)
 			{
-				for (int i = 0; i < fila.Count(); i++)
+				for (int i = 0; i < fila.Length; i++)
 				{
 					string hr = propiedades[i].ToString();
 					fila[i] = T.GetProperty(hr)?.GetValue(obj, null)?.ToString() ?? "";
@@ -91,12 +98,15 @@ namespace Anrodse.CsvParser.Serialization
 
 			var props = T.GetProperties();
 
-			int nFila = 1;  // Cabeceras
-			while (reader.ReadRow(fila))
+			int nFila = 1;  // 0 para cabeceras
+
+			CsvReader.ReadResult res;
+			while ((res = reader.ReadRow(ref fila)) != CsvReader.ReadResult.EoF)
 			{
 				nFila++;
-				object obj = Activator.CreateInstance(T);
+				if (res != CsvReader.ReadResult.Ok) continue;
 
+				object obj = Activator.CreateInstance(T);
 				foreach (PropertyInfo prop in props)
 				{
 					var ats = prop.GetCustomAttributes(true);
@@ -129,7 +139,7 @@ namespace Anrodse.CsvParser.Serialization
 		{
 			// Leer cabecera en una lista
 			List<string> cabecera = new List<string>();
-			if (!reader.ReadHeader(cabecera)) return null;
+			if (reader.ReadHeader(ref cabecera) != CsvReader.ReadResult.Ok) return null;
 
 			// Crear diccionario para collumna: posicion
 			Dictionary<string, int> dic = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -141,7 +151,7 @@ namespace Anrodse.CsvParser.Serialization
 
 		private void TrySetValue(string valor, object obj, PropertyInfo prop)
 		{
-			if (String.IsNullOrWhiteSpace(valor)) return;
+			if (String.IsNullOrEmpty(valor)) return;
 
 			// Opcion 0: OK para strings solo
 			if (prop.PropertyType == typeof(string))
